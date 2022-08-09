@@ -5,15 +5,17 @@ const refs = {
     form: document.querySelector(".feedback-form"),
     email: document.querySelector("input"),
     message: document.querySelector("textarea"),
-    btn: document.querySelector("button")
 }
 
-autocompleteOnLoad(); 
+if (localStorage.getItem('feedback-form-state')) {
+    autocompleteOnLoad()
+  }
 
 refs.form.addEventListener('input', throttle(saveData, 500))
 refs.form.addEventListener('submit', onFormSubmit)
 
-let obj = {}
+let obj = localStorage.getItem("feedback-form-state") ?  JSON.parse(localStorage.getItem('feedback-form-state'))
+: {};
 
 function saveData(event) {
    obj[event.target.name] = event.target.value;
@@ -32,9 +34,8 @@ function autocompleteOnLoad() {
     const savedData = JSON.parse(localStorage.getItem("feedback-form-state"))
     
     if (savedData) {
-      refs.email.value = savedData.email;
-      refs.message.value = savedData.message;
+      refs.email.value = savedData.email ? savedData.email : "";
+      refs.message.value = savedData.message ? savedData.message : "";
     }
-    
-  
+   
 }
